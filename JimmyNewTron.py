@@ -40,8 +40,8 @@ from tflearn.layers.estimator import regression
 #            Options
 # ----------------------------- #
 
-p1_mode = "ai_retrain"
-p2_mode = "random"
+p1_mode = "keyboard"
+p2_mode = "keyboard"
 
 filename = "TronNN.tflearn"
 
@@ -51,7 +51,7 @@ training_games = 1000
 
 games_before_training = 5
 
-speed = 120
+speed = 1000
 
 # ----------------------------- #
 
@@ -189,10 +189,10 @@ def reset():
     if game > 1:
         first_run = False
     # Variables for the players
-    p1x = 10
-    p2x = 30
-    p1y = 10
-    p2y = 30
+    p1x = randint(7, 11)
+    p2x = randint(26, 30)
+    p1y = randint(7, 11)
+    p2y = randint(26, 30)
     p1_alive = True
     p2_alive = True
     p1_dir = 0  # 0 is right, 180 is left, 90 is up, 270 is down
@@ -622,60 +622,45 @@ def handle_player_movement():
 #
 def determine_score():
     global pWin, p1_alive, p2_alive, p1_score, p2_score, p1x_prev, p1y_prev, p2x_prev, p2y_prev
-    p1_win = 0
-    p2_win = 0
-    if p1_move_dir == -1 and ob[0][0] == 1:
-        p1_win = 2
-        p1_alive = False
-    elif p1_move_dir == 0 and ob[0][1] == 1:
-        p1_win = 2
-        p1_alive = False
-    elif p1_move_dir == 1 and ob[0][2] == 1:
-        p1_win = 2
-        p1_alive = False
-    if p2_move_dir == -1 and ob[1][0] == 1:
-        p2_win = 1
+    # determine if either player should crash
+    p1_crash = 0
+    p2_crash = 0
+    # check if there is an occupied tile in the chosen direction
+    if (p1_move_dir == -1 and ob[0][0] == 1) or (p1_move_dir == 0 and ob[0][1] == 1) or \
+            (p1_move_dir == 1 and ob[0][2] == 1):
+        p1_crash = 1
+    if (p2_move_dir == -1 and ob[1][0] == 1) or (p2_move_dir == 0 and ob[1][1] == 1) or \
+            (p2_move_dir == 1 and ob[1][2] == 1):
+        p2_crash = 1
         p2_alive = False
-    elif p2_move_dir == 0 and ob[1][1] == 1:
-        p2_win = 1
-        p2_alive = False
-    elif p2_move_dir == 1 and ob[1][2] == 1:
-        p2_win = 1
-        p2_alive = False
+    # check if there is a conflict with the other player's move
     if (p2x == p1x and p2y == p1y) or (p2x == p1x_prev and p2y == p1y_prev) or (p2x_prev == p1x and p2y_prev == p1y) or\
             (p2x_prev == p1x_prev and p2y_prev == p1y_prev):
-        p1_win = 2
-        p2_win = 1
-    # select random winner if not training AI
-    if p1_win == 2 and p2_win == 1:
-        if p1_mode in ['ai_retrain', 'ai_train_random'] or p2_mode in ['ai_retrain', 'ai_train_random']:
-            pWin = -1
-            p2_win = 0
-            p1_win = 0
-            grid[p1x][p1y] = 6
-            grid[p2x][p2y] = 6
-        else:
-            pWin = randint(1, 2)
-            if pWin == 1:
-                p2_win = 1
-                p1_win = 0
-            else:
-                p1_win = 2
-                p2_win = 0
-    if p2_win == 1:
+        p1_crash = 1
+        p2_crash = 1
+    if p1_crash == 1 and p2_crash == 1:  # if both players crashed, neither should win!
+        p1_alive = False
+        p2_alive = False
+        pWin = -1
+        grid[p1x][p1y] = 6
         grid[p2x][p2y] = 6
+    elif p2_crash == 1 and p1_crash == 0:  # player 1 wins
+        p2_alive = False
         pWin = 1
         p1_score += 1
-        p2_alive = False
-    if p1_win == 2:
-        grid[p1x][p1y] = 6
+        grid[p2x][p2y] = 6
+    elif p1_crash == 1 and p2_crash == 0:  # player 2 wins
+        p1_alive = False
         pWin = 2
         p2_score += 1
-    if p1_win == 2 or p2_win == 1:
-        if p1_win == 2 and p2_win != 1:
-            print('Winner: P2')
-        elif p1_win != 2 and p2_win == 1:
+        grid[p1x][p1y] = 6
+    if pWin != 0:
+        if pWin == 1:
             print('Winner: P1')
+        elif pWin == 2:
+            print('Winner: P2')
+        else:  # pWin == -1
+            print('Winner: NONE')
         print('P1 Score: ' + str(p1_score))
         print('P2 Score: ' + str(p2_score))
 
