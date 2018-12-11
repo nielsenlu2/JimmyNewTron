@@ -20,6 +20,6 @@ Tron is a simple 2-player snake-style game where players try to avoid walls and 
     - games_before_training - specify the number of games to play before training and flushing the data
     - speed                 - choose the refresh rate. 10 is slow, 15 is normal, 60 is recommended for training
 
-When the round is completed, press the space bar to replay.
+When the round is completed, press the space bar to replay. ESC quits the game.
 
 *NOTE* This game requires pygame and tensorflow/TFLearn to run.

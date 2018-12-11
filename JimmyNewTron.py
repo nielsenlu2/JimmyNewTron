@@ -40,18 +40,18 @@ from tflearn.layers.estimator import regression
 #            Options
 # ----------------------------- #
 
-p1_mode = "keyboard"
-p2_mode = "keyboard"
+p1_mode = "ai_load_trained"
+p2_mode = "ai_retrain"
 
 filename = "TronNN.tflearn"
 
-num_obstacles = 15
+num_obstacles = 10
 
-training_games = 1000
+training_games = 250
 
-games_before_training = 5
+games_before_training = 3
 
-speed = 1000
+speed = 60
 
 # ----------------------------- #
 
@@ -60,8 +60,8 @@ black = (0, 0, 0)
 white = (220, 220, 220)
 green = (0, 255, 0)
 red = (255, 0, 0)
-blue = (0, 0, 255)
-shaded_blue = (2, 2, 180)
+shaded_blue = (66, 134, 255)
+blue = (2, 2, 255)
 yellow = (255, 255, 0)
 shaded_yellow = (180, 180, 2)
 obstacle = (140, 20, 240)
@@ -83,7 +83,7 @@ pygame.display.set_caption("JimmyNewTron")
 first_run = True
 
 # calculate size of NN
-visible_block_range = 31  # how far the ai can 'see'
+visible_block_range = 9  # how far the ai can 'see'
 visible_blocks = (visible_block_range**2)-1
 input_size = 8 + visible_blocks
 connected_size = input_size * 2
