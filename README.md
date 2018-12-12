@@ -19,7 +19,9 @@ Tron is a simple 2-player snake-style game where players try to avoid walls and 
                               training games which are played. Select 0 if you do not want it to automatically play games.
     - games_before_training - specify the number of games to play before training and flushing the data
     - speed                 - choose the refresh rate. 10 is slow, 15 is normal, 60 is recommended for training
+    
+There also exists an option to modify the radius of cells which the AI model can 'see', but this option requires retraining the network with `ai_train_random` after being changed. Be careful! 
 
 When the round is completed, press the space bar to replay. ESC quits the game.
 
-*NOTE* This game requires pygame and tensorflow/TFLearn to run.
+*NOTE*: This game requires pygame and tensorflow/TFLearn to run.
