@@ -1,6 +1,6 @@
 **What is Tron?**
 
-Tron is a simple 2-player snake-style game where players try to avoid walls and any already-visited locations. JimmyNewTron is a version which has been rewritten and supports training a neural network model to serve as a non-player character. I have included a model which has been trained for about 1000 frames.
+Tron is a simple 2-player snake-style game where players try to avoid walls and any already-visited locations. JimmyNewTron is a version which has been rewritten and supports training a neural network model to serve as a non-player character. The included model has been trained for about 1000 frames.
 
 **Screenshot:**
 
